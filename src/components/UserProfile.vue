@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import ProfileHeader from './UserProfile/ProfileHeader.vue';
+import UserStats from './UserProfile/UserStats.vue';
+import PostGrid from './UserProfile/PostGrid.vue';
+
 // --- 데이터 타입 정의 ---
 interface User {
   id: number;
@@ -39,66 +43,21 @@ defineProps<{
  * 3. 최종적으로 `UserProfile` 은 분리된 컴포넌트들을 조합하여 동일한 UI를 렌더링해야 합니다.
  * 4. 각 컴포넌트는 scoped 스타일을 사용하세요.
  *
+ * 
+ * 
  */
 </script>
 
 <template>
   <div class="profileContainer">
-    <!-- 1. 프로필 헤더 -->
-    <header class="profileHeader">
-      <div class="avatarContainer">
-        <img :src="user.avatarUrl" :alt="`${user.name}'s avatar`" class="avatar" />
-      </div>
-      <div class="userInfoContainer">
-        <h2 class="username">{{ user.username }}</h2>
-      </div>
-    </header>
-
-    <!-- 2. 사용자 정보 -->
-    <section class="userInfoSection">
-      <h1 class="name">{{ user.name }}</h1>
-      <p class="bio">{{ user.bio }}</p>
-    </section>
-
-    <!-- 3. 사용자 통계 -->
-    <section class="statsSection">
-      <div class="statItem">
-        <span class="statValue">{{ stats.posts }}</span>
-        <span class="statLabel">게시물</span>
-      </div>
-      <div class="statItem">
-        <span class="statValue">{{ stats.followers }}</span>
-        <span class="statLabel">팔로워</span>
-      </div>
-      <div class="statItem">
-        <span class="statValue">{{ stats.following }}</span>
-        <span class="statLabel">팔로잉</span>
-      </div>
-    </section>
-
-    <!-- 4. 게시물 그리드 -->
-    <main class="postsGrid">
-      <div v-for="post in posts" :key="post.id" class="postItem">
-        <img :src="post.imageUrl" :alt="post.caption" class="postImage" />
-      </div>
-    </main>
+    <!-- 궁극적으로 데이터 구조와 화면 구조를 사용했을 때 Props drilling을 가장 적게 하면서도 화면의 영역별로 쪼갤 수 있도록 컴포넌트를 분리했습니다. -->
+    <ProfileHeader :user="user"/>
+    <UserStats :stats="stats"/>
+    <PostGrid :posts="posts"/>
   </div>
 </template>
 
 <style scoped>
 .profileContainer { display: grid; gap: 16px; }
-.profileHeader { display: flex; align-items: center; gap: 12px; }
-.avatarContainer { width: 80px; height: 80px; }
-.avatar { width: 80px; height: 80px; border-radius: 9999px; object-fit: cover; }
-.userInfoContainer { display: flex; align-items: center; gap: 12px; }
-.username { font-size: 20px; margin: 0; }
-.userInfoSection { color: var(--muted); }
-.name { margin: 0; color: var(--fg); }
-.statsSection { display: flex; gap: 24px; }
-.statItem { display: grid; }
-.statValue { font-weight: 700; font-size: 18px; }
-.statLabel { color: var(--muted); }
-.postsGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.postItem { aspect-ratio: 1/1; overflow: hidden; border-radius: 8px; }
-.postImage { width: 100%; height: 100%; object-fit: cover; }
+
 </style>

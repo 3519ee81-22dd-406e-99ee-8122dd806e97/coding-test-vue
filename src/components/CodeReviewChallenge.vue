@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { log } from 'node:console';
+import { watch } from 'vue';
 import { ref, onMounted, computed } from 'vue';
 
 /**
@@ -41,6 +43,8 @@ const fetchUsers = (): Promise<UserData[]> => {
 };
 
 const users = ref<any[]>([]);
+// users가 해당 컴포넌트에서 사용되는 핵심적인 변수인데 타입을 any 배열로 하게 되면 타입안정성이 떨어집니다.
+// 실제로 사용되는 각 객체 안의 변수별로 타입을 지정한 UserData가 존재하기 때문에 해당 타입을 가진 배열로 타입을 지정해줘야 합니다.
 const filter = ref('');
 const loading = ref(true);
 const showAdminsOnly = ref(false);
@@ -59,6 +63,7 @@ const filteredUsers = computed(() => {
     return (nameMatches || emailMatches) && adminMatches;
   });
 });
+
 </script>
 
 <template>
