@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from "vue";
 
 /**
  * ## 과제 5: 코드 리뷰
@@ -26,27 +26,30 @@ type UserData = {
 
 // 가짜 API 호출 함수
 const fetchUsers = (): Promise<UserData[]> => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
-        { id: 1, name: '김철수', email: 'chulsoo@example.com', isAdmin: false },
-        { id: 2, name: '이영희', email: 'younghee@example.com', isAdmin: true },
-        { id: 3, name: '스티브', email: 'steve@example.com', isAdmin: false },
-        { id: 4, name: '관리자', email: 'admin@example.com', isAdmin: true },
-        { id: 5, name: 'Steve Jobs', email: 'sj@apple.com', isAdmin: false },
-        { id: 6, name: 'Apple Mint', email: 'mint@gmail.com', isAdmin: false },
+        { id: 1, name: "김철수", email: "chulsoo@example.com", isAdmin: false },
+        { id: 2, name: "이영희", email: "younghee@example.com", isAdmin: true },
+        { id: 3, name: "스티브", email: "steve@example.com", isAdmin: false },
+        { id: 4, name: "관리자", email: "admin@example.com", isAdmin: true },
+        { id: 5, name: "Steve Jobs", email: "sj@apple.com", isAdmin: false },
+        { id: 6, name: "Apple Mint", email: "mint@gmail.com", isAdmin: false },
       ]);
     }, 500);
   });
 };
 
 const users = ref<any[]>([]);
-const filter = ref('');
+const filter = ref("");
 const loading = ref(true);
 const showAdminsOnly = ref(false);
 
 onMounted(async () => {
   const data = await fetchUsers();
+  // fetchUsers에서  setTimeout을 활용하여 데이터를 받아오는데 약간의 시간차가 있음
+  // onMounted를 사용하여 페이지가 실행되자마자 users값을 받아옴 (여기서 users값은 실행되자마자 정의되기 때문에 undefine 빈값으로 나옴)
+  // 따라서 users의 값을 watchEffect로 바꾸어 fetchUsers에서 값이 받아질때 users의 값을 받아오는 것이 더 효율적임
   users.value = data;
   loading.value = false;
 });
@@ -64,14 +67,13 @@ const filteredUsers = computed(() => {
 <template>
   <div class="container">
     <h2>과제 5: 코드 리뷰하기</h2>
-    <p class="description">이 파일(<code>CodeReviewChallenge.vue</code>)의 코드에 대한 리뷰를 주석으로 작성해주세요.</p>
+    <p class="description">
+      이 파일(<code>CodeReviewChallenge.vue</code>)의 코드에 대한 리뷰를
+      주석으로 작성해주세요.
+    </p>
 
     <div class="controls">
-      <input
-        placeholder="이름으로 검색..."
-        v-model="filter"
-        class="input"
-      />
+      <input placeholder="이름으로 검색..." v-model="filter" class="input" />
       <label>
         <input type="checkbox" v-model="showAdminsOnly" />
         관리자만 보기
@@ -92,7 +94,9 @@ const filteredUsers = computed(() => {
           <td>{{ u.name }}</td>
           <td>{{ u.email }}</td>
           <!-- 역할(Role) 표시 -->
-          <td :style="{ color: u.isAdmin ? 'blue' : 'black' }">{{ u.isAdmin ? 'Admin' : 'User' }}</td>
+          <td :style="{ color: u.isAdmin ? 'blue' : 'black' }">
+            {{ u.isAdmin ? "Admin" : "User" }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -100,10 +104,31 @@ const filteredUsers = computed(() => {
 </template>
 
 <style scoped>
-.container { display: grid; gap: 12px; }
-.description { color: var(--muted); }
-.controls { display: flex; gap: 8px; align-items: center; }
-.input { padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; }
-.table { width: 100%; border-collapse: collapse; }
-.table th, .table td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+.container {
+  display: grid;
+  gap: 12px;
+}
+.description {
+  color: var(--muted);
+}
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.input {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  border: 1px solid var(--border);
+  padding: 6px 8px;
+  text-align: left;
+}
 </style>
