@@ -15,16 +15,25 @@ import { ref, watch, onBeforeUnmount, type Ref } from 'vue';
 export function useDebounce<T>(value: Ref<T> | T, delay = 300): Ref<T> {
   // TODO: 여기를 구현하세요.
   const out = ref((value as any).value ?? value) as Ref<T>;
+  let timer: number | undefined;
 
   const stop = watch(
     () => (value as any).value ?? value,
     (v) => {
-      (out as any).value = v;
+      // 타이머 값이 있을 경우 초기화
+      if (timer) clearTimeout(timer);
+
+      timer = window.setTimeout(() => {
+        (out as any).value = v;
+      }, delay);
     },
     { immediate: true }
   );
 
   onBeforeUnmount(() => {
+    // 타이머 값이 있을 경우 초기화
+    if (timer) clearTimeout(timer);
+
     stop();
   });
 
