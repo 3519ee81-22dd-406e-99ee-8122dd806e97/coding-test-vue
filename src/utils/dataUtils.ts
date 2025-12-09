@@ -45,7 +45,8 @@ export interface PaginatedResult<T> {
 
 // 문제 1: 활성 사용자 필터링
 export const filterActiveUsers = (users: User[]): User[] => {
-  return [];
+  let activeUsers: User[] = users.filter((user) => user.isActive === true);
+  return activeUsers;
 };
 
 // 문제 2: ID로 사용자 찾기
@@ -75,6 +76,21 @@ export const addIsAdultProperty = (users: User[]): (User & { isAdult: boolean })
 
 // 문제 7: 카테고리별 상품 총액 계산
 export const getCategoryTotals = (products: Product[]): CategorySummary => {
+  // 상품 가격 총액을 담을 변수
+  let electronicDevicesPrice: number = 0;
+  let clothesPrice: number = 0;
+  let booksPrice: number = 0;
+
+  products.forEach((element) => {
+    if (element.category === '전자기기') {
+      electronicDevicesPrice += element.price;
+    } else if (element.category === '의류') {
+      clothesPrice += element.price;
+    } else {
+      booksPrice += element.price;
+    }
+  });
+
   return {};
 };
 
